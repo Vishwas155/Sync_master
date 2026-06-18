@@ -1,8 +1,9 @@
 import sqlite3
+import os
 from pathlib import Path
 from typing import Optional
 
-DB_PATH = Path.home() / ".obsync" / "sync.db"
+DB_PATH = Path(os.environ.get("OBSYNC_HOME", Path.home() / ".obsync")) / "sync.db"
 
 def init_db():
     DB_PATH.parent.mkdir(exist_ok=True)

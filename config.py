@@ -2,7 +2,7 @@ import json
 import os
 from pathlib import Path
 
-CONFIG_DIR = Path.home() / ".obsync"
+CONFIG_DIR = Path(os.environ.get("OBSYNC_HOME", Path.home() / ".obsync"))
 CONFIG_FILE = CONFIG_DIR / "config.json"
 
 DEFAULT_CONFIG = {
