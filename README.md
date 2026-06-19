@@ -41,30 +41,68 @@ source venv/bin/activate  # or `venv\Scripts\activate` on Windows
 pip install -r requirements.txt
 ```
 
+### Configuration (Before First Run)
+
+First, decide where your Obsidian vault is located:
+
+**macOS/Linux:**
+
+```bash
+~/Documents/Obsidian      # Default location
+~/Vaults/MyVault          # Or anywhere else
+/mnt/backup/vault         # Or external drive
+```
+
+**Windows:**
+
+```
+C:\Users\YourName\Documents\Obsidian
+C:\Vaults\MyVault
+D:\backup\vault
+```
+
 ### Run
 
 ```bash
 python3 main.py
 ```
 
-First run:
-1. App creates `~/.obsync/` config directory
-2. Sets vault to `~/Documents/Obsidian` (configurable)
-3. Advertises itself on LAN via mDNS
-4. Discovers other ObsSync instances
-
-### Configuration
-
-Edit `~/.obsync/config.json`:
+On first run, app creates `~/.obsync/config.json` with defaults:
 
 ```json
 {
   "vault_path": "/Users/vishwas/Documents/Obsidian",
   "port": 8765,
-  "device_name": "Vishwas-MacBook",
+  "device_name": "vishwass-MacBook-Air",
   "auto_sync": true
 }
 ```
+
+**Customize vault path:**
+
+Edit `~/.obsync/config.json` before running again:
+
+```json
+{
+  "vault_path": "/Users/vishwas/Vaults/MyPersonalVault",
+  "port": 8765,
+  "device_name": "MyMac",
+  "auto_sync": true
+}
+```
+
+Then restart app:
+
+```bash
+python3 main.py
+```
+
+**Config fields:**
+
+- `vault_path` — Full path to Obsidian vault (must exist)
+- `port` — Server port (8765 default, change if conflict)
+- `device_name` — Name shown to peers (e.g., "Laptop", "Desktop")
+- `auto_sync` — Auto-sync on file change (true/false)
 
 ## How It Works
 
