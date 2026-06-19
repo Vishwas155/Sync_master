@@ -2,14 +2,14 @@ from PySide6.QtWidgets import (
     QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QPushButton,
     QLabel, QListWidget, QListWidgetItem, QTextEdit
 )
-from PySide6.QtCore import Qt, Signal
+from PySide6.QtCore import Qt, Signal, QTimer
 from PySide6.QtGui import QIcon, QColor
-import asyncio
 from config import get_vault_path, get_device_name
 from discovery import get_online_peers
 
 class MainWindow(QMainWindow):
     sync_requested = Signal()
+    activity_updated = Signal(str)
 
     def __init__(self):
         super().__init__()
@@ -51,6 +51,9 @@ class MainWindow(QMainWindow):
         central.setLayout(layout)
         self.update_peers_list()
 
+        # Connect signal for thread-safe UI updates
+        self.activity_updated.connect(self._update_activity_safe)
+
     def on_sync_click(self):
         self.sync_requested.emit()
         self.add_activity("Sync initiated...")
@@ -71,9 +74,14 @@ class MainWindow(QMainWindow):
                 self.peers_list.addItem(item)
 
     def add_activity(self, message: str):
+        import datetime
+        timestamp = datetime.datetime.now().strftime("%H:%M:%S")
+        text = f"{timestamp}  {message}"
+        self.activity_updated.emit(text)
+
+    def _update_activity_safe(self, message: str):
         current = self.activity_text.toPlainText()
-        timestamp = __import__("datetime").datetime.now().strftime("%H:%M:%S")
-        self.activity_text.setText(f"{timestamp}  {message}\n{current}")
+        self.activity_text.setText(f"{message}\n{current}")
 
     def update_status(self, syncing: bool):
         if syncing:
