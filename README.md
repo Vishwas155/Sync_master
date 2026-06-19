@@ -173,10 +173,38 @@ obsync/
 - No partial file sync (full files only)
 - No version history (latest wins, no rollback)
 
+## Android (Termux - Headless Mode)
+
+### Setup
+
+1. Install Termux (F-Droid or Play Store)
+2. In Termux:
+
+```bash
+pkg install python3 git
+git clone https://github.com/Vishwas155/Sync_master.git
+cd Sync_master
+pip install -r requirements-headless.txt
+```
+
+3. Edit `~/.obsync/config.json` to point vault to `/sdcard/Documents/Obsidian`
+
+4. Run:
+
+```bash
+python3 sync_headless.py
+```
+
+Server runs in background, auto-syncs every 60s with peers on LAN.
+
+### Limitations (Termux)
+- No UI (CLI only)
+- Requires desktop client on same LAN to initiate sync
+- Must keep Termux open or use a process manager
+
 ## Phase 2 (Future)
 
-- [ ] Android support (Flutter app)
-- [ ] iOS support (if Android goes well)
+- [ ] Flutter app for Android/iOS (proper UI)
 - [ ] Encryption option
 - [ ] Selective sync (only sync certain folders)
 - [ ] Detailed sync history viewer
