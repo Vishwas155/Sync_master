@@ -1,10 +1,9 @@
 from PySide6.QtWidgets import (
-    QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QPushButton,
+    QMainWindow, QWidget, QVBoxLayout, QPushButton,
     QLabel, QListWidget, QListWidgetItem, QTextEdit
 )
-from PySide6.QtCore import Qt, Signal, QTimer
-from PySide6.QtGui import QIcon, QColor
-from config import get_vault_path, get_device_name
+from PySide6.QtCore import Signal
+from config import get_vault_path
 from discovery import get_online_peers
 
 class MainWindow(QMainWindow):
@@ -49,12 +48,17 @@ class MainWindow(QMainWindow):
         layout.addWidget(sync_button)
 
         central.setLayout(layout)
+        self.sync_button = sync_button
         self.update_peers_list()
 
         # Connect signal for thread-safe UI updates
         self.activity_updated.connect(self._update_activity_safe)
 
     def on_sync_click(self):
+        peers = get_online_peers()
+        if not peers:
+            self.add_activity("✗ No peers available")
+            return
         self.sync_requested.emit()
         self.add_activity("Sync initiated...")
 
